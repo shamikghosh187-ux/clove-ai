@@ -65,5 +65,5 @@ ipcMain.handle("clove:chat", async (_e, request) => {
   if (typeof content !== "string") throw Error("Provider returned no text response.");
   return { content, model: data.model || model };
 });
-app.whenReady().then(() => { createWindow(); app.on("activate", () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); }); });
+ipcMain.handle("clove:ollama:check", async () => { const s=readSettings(); const base=s.localMode?s.baseUrl:"http://127.0.0.1:11434"; let parsed; try { parsed=new URL(base); } catch { throw Error("Invalid Ollama URL."); } if(!["localhost","127.0.0.1","[::1]"].includes(parsed.hostname)||parsed.protocol!=="http:") throw Error("Ollama check is restricted to localhost."); const response=await fetch(base.replace(/\/$/,"")+"/api/tags",{signal:AbortSignal.timeout(5000)}); const data=await response.json().catch(()=>({})); if(!response.ok)throw Error("Ollama returned HTTP "+response.status); return {ok:true,models:Array.isArray(data.models)?data.models.map(m=>m.name).filter(Boolean):[]}; });\napp.whenReady().then(() => { createWindow(); app.on("activate", () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); }); });
 app.on("window-all-closed", () => { if (process.platform !== "darwin") app.quit(); });
