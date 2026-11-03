@@ -1,0 +1,15 @@
+appId: ai.clove.desktop
+productName: CLOVE AI
+directories:
+  output: ../../release
+files:
+  - dist/desktop/**
+  - apps/desktop/electron/**
+  - package.json
+  - node_modules/**
+win:
+  target: [nsis]
+mac:
+  target: [dmg]
+linux:
+  target: [AppImage]
