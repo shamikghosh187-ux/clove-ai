@@ -7,7 +7,7 @@ CLOVE is an Electron desktop app with provider-compatible chat, local conversati
 ## Requirements
 - Node.js 20+
 - npm
-- API key for an OpenAI-compatible chat-completions provider (usage may cost money)
+- For cloud mode: API key for an OpenAI-compatible chat-completions provider (usage may cost money)\n- For local mode: Ollama installed and a compatible model pulled (no API fee; downloads use disk space)
 
 ## Run on Windows
 ```powershell
@@ -63,7 +63,7 @@ console.log(result.content);
 - [x] Local settings and encrypted key storage where available
 - [x] Local conversation persistence
 - [x] Local text/code/document context
-- [x] Voice input/output hooks
+- [x] Local Ollama `/api/chat` integration and localhost-only URL validation\n- [x] Cloud/local mode switch in Settings\n- [x] Voice input/output hooks
 - [x] Reusable provider adapter
 - [ ] Automated tests and Windows packaging verification
 - [ ] OCR for scanned PDFs
