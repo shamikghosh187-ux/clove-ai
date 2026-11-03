@@ -1,0 +1,14 @@
+{
+  "name": "@clove-ai/example-sdk",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@clove-ai/core": "0.1.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}
