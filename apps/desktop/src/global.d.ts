@@ -1,0 +1,1 @@
+export {}; declare global { interface Window { clove:{getSettings():Promise<{apiKey:string;baseUrl:string;model:string}>;saveSettings(s:{apiKey:string;baseUrl:string;model:string}):Promise<{ok:boolean}>;chat(r:{model?:string;messages:{role:"system"|"user"|"assistant";content:string}[]}):Promise<{content:string;model:string}>;}; }
