@@ -2,62 +2,69 @@
 
 **A personal AI assistant for desktop and application integration.**
 
-CLOVE is an open-source starter for building a configurable AI assistant that can run as a desktop app and be embedded into other software through a reusable TypeScript core.
+CLOVE is an early open-source starter for a configurable desktop assistant and reusable TypeScript core.
 
-> Status: early development. APIs and desktop experience are not stable yet.
+## Desktop app
 
-## What we're building
+Electron + React + Vite. The raw API key stays in Electron's main process and is stored with Electron `safeStorage` when available.
 
-- A desktop assistant for Windows, macOS, and Linux (Electron).
-- A reusable TypeScript assistant core for other applications.
-- Provider configuration through user-supplied API keys.
-- Conversation history and settings stored locally.
-- A clear separation between the desktop interface and assistant engine.
+### Requirements
 
-## Project structure
-
-```
-apps/
-  desktop/       # Electron + React desktop application (planned)
-packages/
-  core/          # reusable assistant engine
-examples/
-  sdk/           # integration example
-```
-
-## Getting started
-
-The first development milestone is the reusable core. Desktop packaging and additional providers will follow.
-
-Requirements:
 - Node.js 20+
 - npm
+- API key from an OpenAI-compatible provider
 
-```bash
+### Run on Windows
+
+Open PowerShell in the repository folder:
+
+```powershell
 npm install
-npm run build
+npm run dev
 ```
 
-## Provider setup
+### Build / package
 
-CLOVE does not ship with an API key. Configure your own provider credentials in the application or pass them to the core at runtime. Never commit secrets or place private API keys in frontend code.
-
-## Development
-
-```bash
+```powershell
 npm run typecheck
 npm run build
+npm run dist
 ```
+
+Installer output is placed in `release/`.
+
+## Configure
+
+Open Settings and enter:
+- API key
+- API base URL (default `https://api.openai.com/v1`)
+- Model (default `gpt-4o-mini`)
+
+CLOVE sends requests to `/chat/completions`. Compatible providers may work, depending on their API format and model access. Provider usage can cost money; CLOVE does not include API credits.
+
+## Security
+
+- Never commit API keys or secrets.
+- Keys are saved locally using Electron secure storage where available.
+- Prompts and credentials are sent to the configured provider endpoint.
+- Verify provider URLs before using them.
+- This project is early development; review before using sensitive data.
+
+## Layout
+
+- `apps/desktop`: Electron + React desktop application
+- `packages/core`: reusable TypeScript assistant core
+- `examples/sdk`: integration example
 
 ## Roadmap
 
-- [x] Create public repository and project foundation
-- [ ] Reusable provider-neutral assistant core
-- [ ] OpenAI-compatible provider adapter
-- [ ] Electron desktop shell
-- [ ] Local conversation/settings persistence
+- [x] Repository and initial foundation
+- [x] Desktop UI and provider request path
+- [ ] Build/test on Windows
+- [ ] Provider adapter abstraction
+- [ ] Local conversation history
 - [ ] Additional provider adapters
-- [ ] Documentation and release builds
+- [ ] Integration docs
 
 ## License
 
