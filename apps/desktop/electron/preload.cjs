@@ -1,0 +1,1 @@
+const {contextBridge,ipcRenderer}=require("electron");contextBridge.exposeInMainWorld("clove",{getSettings:()=>ipcRenderer.invoke("clove:settings:get"),saveSettings:s=>ipcRenderer.invoke("clove:settings:save",s),chat:r=>ipcRenderer.invoke("clove:chat",r)});
