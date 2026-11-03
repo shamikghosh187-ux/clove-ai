@@ -1,15 +1,23 @@
 {
   "name": "clove-ai",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "A configurable AI assistant for desktop and application integration",
   "license": "MIT",
   "workspaces": ["packages/*", "apps/*", "examples/*"],
   "scripts": {
-    "build": "npm run build --workspace @clove-ai/core",
-    "typecheck": "npm run typecheck --workspace @clove-ai/core"
+    "dev": "concurrently -k \"npm:dev:renderer\" \"npm:dev:electron\"",
+    "dev:renderer": "vite --config apps/desktop/vite.config.ts",
+    "dev:electron": "wait-on http://127.0.0.1:5173 && electron apps/desktop/electron/main.cjs",
+    "build": "npm run build --workspace @clove-ai/core && npm run build --workspace @clove-ai/desktop",
+    "typecheck": "npm run typecheck --workspace @clove-ai/core && npm run typecheck --workspace @clove-ai/desktop",
+    "dist": "npm run build && electron-builder --config apps/desktop/electron-builder.yml"
   },
-  "engines": {
-    "node": ">=20"
-  }
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "electron": "^34.3.0",
+    "electron-builder": "^25.1.8",
+    "wait-on": "^8.0.2"
+  },
+  "engines": { "node": ">=20" }
 }
