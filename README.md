@@ -1,71 +1,73 @@
 # CLOVE AI
 
-**A personal AI assistant for desktop and application integration.**
+**An open-source desktop AI assistant and reusable TypeScript SDK.**
 
-CLOVE is an early open-source starter for a configurable desktop assistant and reusable TypeScript core.
+CLOVE is an Electron desktop app with provider-compatible chat, local conversation history, local document context, and a reusable provider-neutral core. This is an early project; features marked experimental may need testing on Windows.
 
-## Desktop app
-
-Electron + React + Vite. The raw API key stays in Electron's main process and is stored with Electron `safeStorage` when available.
-
-### Requirements
-
+## Requirements
 - Node.js 20+
 - npm
-- API key from an OpenAI-compatible provider
+- API key for an OpenAI-compatible chat-completions provider (usage may cost money)
 
-### Run on Windows
-
-Open PowerShell in the repository folder:
-
+## Run on Windows
 ```powershell
 npm install
 npm run dev
 ```
 
-### Build / package
-
+## Build and package
 ```powershell
 npm run typecheck
 npm run build
 npm run dist
 ```
+The installer is configured to output under `release/`. Build/package has not yet been verified on a Windows machine.
 
-Installer output is placed in `release/`.
+## Desktop features
+- Electron + React + Vite desktop shell
+- OpenAI-compatible `/chat/completions` provider endpoint
+- API key and endpoint/model configuration in Settings
+- Electron safeStorage-backed API key storage when supported
+- Local conversation list and saved messages
+- Open supported local text/code/PDF documents for prompt context (PDF extraction is basic text parsing; scanned PDFs need OCR and may not work)
+- Voice input/output using the browser's available speech APIs; availability varies by Windows/Electron build
 
-## Configure
+## Provider setup
+In Settings, set API key, HTTPS base URL (default OpenAI endpoint), and model name. The endpoint must support OpenAI-compatible chat completions. CLOVE does not include API credits. Do not send sensitive documents to providers unless you have permission and understand their data policies.
 
-Open Settings and enter:
-- API key
-- API base URL (default `https://api.openai.com/v1`)
-- Model (default `gpt-4o-mini`)
+## SDK
+`packages/core` exports `Assistant`, `createAssistant`, and `OpenAICompatibleProvider`. Example:
+```ts
+import { Assistant, OpenAICompatibleProvider } from "@clove-ai/core";
+const provider = new OpenAICompatibleProvider({ apiKey: process.env.AI_API_KEY });
+const assistant = new Assistant({ provider, model: "your-model" });
+const result = await assistant.ask("Hello!");
+console.log(result.content);
+```
 
-CLOVE sends requests to `/chat/completions`. Compatible providers may work, depending on their API format and model access. Provider usage can cost money; CLOVE does not include API credits.
+## Security notes
+- Never commit API keys.
+- Credentials are stored in the app's local user-data folder using Electron secure storage when available.
+- Conversation history and document excerpts remain local unless included in a chat request.
+- Prompt content and attachments included in chat are sent to the configured provider.
+- Check custom provider URLs before entering credentials.
+- CLOVE is early development software. Review the code before using it with confidential data.
 
-## Security
-
-- Never commit API keys or secrets.
-- Keys are saved locally using Electron secure storage where available.
-- Prompts and credentials are sent to the configured provider endpoint.
-- Verify provider URLs before using them.
-- This project is early development; review before using sensitive data.
-
-## Layout
-
+## Project layout
 - `apps/desktop`: Electron + React desktop application
-- `packages/core`: reusable TypeScript assistant core
-- `examples/sdk`: integration example
+- `packages/core`: provider-neutral assistant SDK and compatible provider adapter
+- `examples/sdk`: integration examples
 
-## Roadmap
-
-- [x] Repository and initial foundation
-- [x] Desktop UI and provider request path
-- [ ] Build/test on Windows
-- [ ] Provider adapter abstraction
-- [ ] Local conversation history
-- [ ] Additional provider adapters
-- [ ] Integration docs
+## Status
+- [x] Desktop UI and API chat path
+- [x] Local settings and encrypted key storage where available
+- [x] Local conversation persistence
+- [x] Local text/code/document context
+- [x] Voice input/output hooks
+- [x] Reusable provider adapter
+- [ ] Automated tests and Windows packaging verification
+- [ ] OCR for scanned PDFs
+- [ ] More native desktop actions/provider adapters
 
 ## License
-
 MIT. See [LICENSE](LICENSE).
